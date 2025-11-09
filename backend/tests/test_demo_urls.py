@@ -11,13 +11,11 @@ from fastapi.testclient import TestClient
 from datetime import datetime, timedelta
 
 
-# Mock client - will be configured once actual endpoint is implemented
 @pytest.fixture
 def client():
     """Test client fixture"""
-    # from app.main import app
-    # return TestClient(app)
-    return None
+    from app.main import app
+    return TestClient(app)
 
 
 @pytest.fixture
@@ -37,16 +35,11 @@ class TestDemoURLCreation:
 
     def test_demo_endpoint_exists(self, client):
         """Should have /api/demo/urls POST endpoint"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
-
         response = client.post("/api/demo/urls", json={"url": "https://example.com"})
-        assert response.status_code in [200, 201, 404], "Endpoint should exist or return not found"
+        assert response.status_code in [200, 201], "Endpoint should exist and return success"
 
     def test_create_demo_url_without_authentication(self, client, valid_url):
         """Should allow creating demo URL without authentication token"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         # No Authorization header
         response = client.post(
@@ -58,8 +51,6 @@ class TestDemoURLCreation:
 
     def test_create_demo_url_returns_shortened_url(self, client, valid_url):
         """Should return shortened URL in response"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         response = client.post(
             "/api/demo/urls",
@@ -73,8 +64,6 @@ class TestDemoURLCreation:
 
     def test_create_demo_url_response_time_under_2_seconds(self, client, valid_url):
         """Should generate demo URL within 2 seconds"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         import time
         start_time = time.time()
@@ -89,8 +78,6 @@ class TestDemoURLCreation:
 
     def test_demo_url_includes_expiry_info(self, client, valid_url):
         """Should indicate demo URLs expire after 24 hours"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         response = client.post(
             "/api/demo/urls",
@@ -107,8 +94,6 @@ class TestDemoURLValidation:
 
     def test_reject_invalid_url_format(self, client, invalid_url):
         """Should reject invalid URL format"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         response = client.post(
             "/api/demo/urls",
@@ -118,8 +103,6 @@ class TestDemoURLValidation:
 
     def test_reject_missing_url_field(self, client):
         """Should reject request without URL field"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         response = client.post(
             "/api/demo/urls",
@@ -129,8 +112,6 @@ class TestDemoURLValidation:
 
     def test_reject_empty_url(self, client):
         """Should reject empty URL string"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         response = client.post(
             "/api/demo/urls",
@@ -140,8 +121,6 @@ class TestDemoURLValidation:
 
     def test_accept_various_valid_url_schemes(self, client):
         """Should accept http and https URLs"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         valid_urls = [
             "https://example.com",
@@ -163,8 +142,6 @@ class TestDemoURLRateLimiting:
 
     def test_rate_limit_exists(self, client, valid_url):
         """Should implement rate limiting on demo endpoint"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         # Make multiple rapid requests
         responses = []
@@ -181,8 +158,6 @@ class TestDemoURLRateLimiting:
 
     def test_rate_limit_returns_429_status(self, client, valid_url):
         """Should return 429 Too Many Requests when rate limited"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         # Trigger rate limit
         for _ in range(12):
@@ -196,8 +171,6 @@ class TestDemoURLRateLimiting:
 
     def test_rate_limit_includes_retry_after_header(self, client, valid_url):
         """Should include Retry-After header when rate limited"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         # Trigger rate limit
         for _ in range(12):
@@ -215,8 +188,6 @@ class TestDemoURLStorage:
 
     def test_demo_urls_stored_temporarily(self, client, valid_url):
         """Demo URLs should be stored but marked as temporary"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         response = client.post(
             "/api/demo/urls",
@@ -230,8 +201,6 @@ class TestDemoURLStorage:
 
     def test_demo_urls_expire_after_24_hours(self, client, valid_url):
         """Demo URLs should have 24-hour expiry"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         response = client.post(
             "/api/demo/urls",
@@ -250,8 +219,6 @@ class TestDemoURLStorage:
 
     def test_demo_urls_not_associated_with_user_account(self, client, valid_url):
         """Demo URLs should not be linked to user accounts"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         response = client.post(
             "/api/demo/urls",
@@ -268,8 +235,6 @@ class TestDemoURLSecurity:
 
     def test_sanitize_url_input(self, client):
         """Should sanitize URL input to prevent XSS"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         malicious_url = "https://example.com/<script>alert('xss')</script>"
 
@@ -284,8 +249,6 @@ class TestDemoURLSecurity:
 
     def test_cors_configuration(self, client, valid_url):
         """Should have proper CORS configuration for public endpoint"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         response = client.options("/api/demo/urls")
 
@@ -294,8 +257,6 @@ class TestDemoURLSecurity:
 
     def test_no_sql_injection_vulnerability(self, client):
         """Should be protected against SQL injection"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         sql_injection_url = "https://example.com'; DROP TABLE urls; --"
 
@@ -313,8 +274,6 @@ class TestDemoURLRedirect:
 
     def test_demo_short_url_redirects_correctly(self, client, valid_url):
         """Created demo short URL should redirect to original URL"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         # Create demo URL
         create_response = client.post(
@@ -334,8 +293,6 @@ class TestDemoURLRedirect:
 
     def test_demo_url_works_without_analytics(self, client, valid_url):
         """Demo URLs should redirect but not collect analytics"""
-        if client is None:
-            pytest.skip("Demo endpoint not yet implemented")
 
         create_response = client.post(
             "/api/demo/urls",
@@ -352,24 +309,18 @@ class TestPublicStatsEndpoint:
 
     def test_public_stats_endpoint_exists(self, client):
         """Should have /api/public/stats GET endpoint"""
-        if client is None:
-            pytest.skip("Stats endpoint not yet implemented")
 
         response = client.get("/api/public/stats")
         assert response.status_code in [200, 404], "Endpoint should exist or return not found"
 
     def test_stats_endpoint_no_authentication_required(self, client):
         """Stats endpoint should not require authentication"""
-        if client is None:
-            pytest.skip("Stats endpoint not yet implemented")
 
         response = client.get("/api/public/stats")
         assert response.status_code != 401, "Should not require authentication"
 
     def test_stats_include_total_urls(self, client):
         """Should return total URLs shortened"""
-        if client is None:
-            pytest.skip("Stats endpoint not yet implemented")
 
         response = client.get("/api/public/stats")
 
@@ -379,8 +330,6 @@ class TestPublicStatsEndpoint:
 
     def test_stats_include_total_clicks(self, client):
         """Should return total clicks tracked"""
-        if client is None:
-            pytest.skip("Stats endpoint not yet implemented")
 
         response = client.get("/api/public/stats")
 
@@ -390,8 +339,6 @@ class TestPublicStatsEndpoint:
 
     def test_stats_include_active_users(self, client):
         """Should return active user count"""
-        if client is None:
-            pytest.skip("Stats endpoint not yet implemented")
 
         response = client.get("/api/public/stats")
 
@@ -401,8 +348,6 @@ class TestPublicStatsEndpoint:
 
     def test_stats_cached_for_performance(self, client):
         """Stats should be cached to avoid database load"""
-        if client is None:
-            pytest.skip("Stats endpoint not yet implemented")
 
         import time
 
@@ -422,8 +367,6 @@ class TestPublicStatsEndpoint:
 
     def test_stats_response_time_fast(self, client):
         """Stats endpoint should respond quickly (< 100ms)"""
-        if client is None:
-            pytest.skip("Stats endpoint not yet implemented")
 
         import time
         start = time.time()
