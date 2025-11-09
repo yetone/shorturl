@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import event
 from .database import engine, Base, get_db
-from .routers import users, auth, urls, redirect, settings, frontend
+from .routers import users, auth, urls, redirect, settings, frontend, demo
 from .models.models import SiteSettings, User
 from sqlalchemy.orm import Session
 import os
@@ -49,6 +49,7 @@ app.include_router(users.router)
 app.include_router(urls.router)
 app.include_router(redirect.router)
 app.include_router(settings.router)
+app.include_router(demo.router, prefix="/api")
 
 # API health check route
 @app.get("/api/health")

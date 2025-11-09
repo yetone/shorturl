@@ -52,7 +52,17 @@ class Click(Base):
 
 class SiteSettings(Base):
     __tablename__ = "site_settings"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     registration_enabled = Column(Boolean, default=True)
     last_updated = Column(DateTime, default=datetime.utcnow)
+
+class DemoURL(Base):
+    __tablename__ = "demo_urls"
+
+    id = Column(Integer, primary_key=True, index=True)
+    original_url = Column(String, index=True)
+    short_code = Column(String, unique=True, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime, index=True)  # 24 hours from creation
+    ip_address = Column(String, nullable=True)  # For rate limiting

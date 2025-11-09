@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from typing import Optional
 from ..database import get_db
-from ..models.models import URL, Click
+from ..models.models import URL, Click, DemoURL
 from user_agents import parse as ua_parse
 import geoip2.database
 import os
@@ -29,9 +29,22 @@ def redirect_to_url(
     user_agent: Optional[str] = Header(None),
     referer: Optional[str] = Header(None)
 ):
+    # First check regular URLs
     db_url = db.query(URL).filter(URL.short_code == short_code).first()
+
+    # If not found, check demo URLs
     if db_url is None:
-        raise HTTPException(status_code=404, detail="URL not found")
+        from datetime import datetime
+        demo_url = db.query(DemoURL).filter(
+            DemoURL.short_code == short_code,
+            DemoURL.expires_at > datetime.utcnow()
+        ).first()
+
+        if demo_url is None:
+            raise HTTPException(status_code=404, detail="URL not found or expired")
+
+        # Demo URLs don't track clicks - just redirect
+        return RedirectResponse(url=demo_url.original_url)
     
     # Parse user agent to get operating system and browser
     operating_system = "Unknown"
