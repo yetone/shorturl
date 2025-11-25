@@ -24,12 +24,13 @@ export const EnhancedFeatureCard: FC<EnhancedFeatureCardProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const handleToggle = () => setIsExpanded(!isExpanded);
+
   return (
     <motion.div variants={variants} className="h-full">
       <GlassMorphismCard
-        className="h-full p-6 cursor-pointer transition-all hover:scale-105"
+        className="h-full p-6 transition-all hover:scale-105"
         glowColor={glowColor}
-        onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="mb-4">{icon}</div>
         <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">{title}</h3>
@@ -56,7 +57,8 @@ export const EnhancedFeatureCard: FC<EnhancedFeatureCardProps> = ({
         </AnimatePresence>
 
         <button
-          className="mt-4 flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors text-sm font-medium"
+          onClick={handleToggle}
+          className="mt-4 flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors text-sm font-medium cursor-pointer"
           aria-expanded={isExpanded}
           aria-label={isExpanded ? 'Show less' : 'Learn more'}
         >

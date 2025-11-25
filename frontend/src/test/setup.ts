@@ -8,15 +8,15 @@ afterEach(() => {
 });
 
 // Mock IntersectionObserver
-global.IntersectionObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-  root: null,
-  rootMargin: '',
-  thresholds: [],
-  takeRecords: vi.fn(),
-}));
+global.IntersectionObserver = class IntersectionObserver {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+  root = null;
+  rootMargin = '';
+  thresholds = [];
+  takeRecords = vi.fn();
+} as any;
 
 // Mock matchMedia for responsive tests
 Object.defineProperty(window, 'matchMedia', {
