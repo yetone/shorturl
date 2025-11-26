@@ -7,6 +7,7 @@ import { BackgroundEffect } from '../components/BackgroundEffect';
 import { Link2, BarChart3, LayoutDashboard, Globe, Shield, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import Footer from '../components/Footer';
 
 const Home: FC = () => {
   const { user } = useAuth();
@@ -146,14 +147,7 @@ const Home: FC = () => {
           </div>
         </motion.div>
         
-        <motion.footer 
-          className={`mt-24 text-center text-sm ${isDarkMode ? 'opacity-50' : 'opacity-75'} z-10`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-        >
-          <p>&copy; {new Date().getFullYear()} ShortURL. All rights reserved.</p>
-        </motion.footer>
+        <Footer />
       </div>
     </>
   );

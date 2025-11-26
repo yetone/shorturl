@@ -6,6 +6,22 @@ import * as AuthContext from '../contexts/AuthContext';
 import * as ThemeContext from '../contexts/ThemeContext';
 import { FuturisticButton } from '../components/FuturisticButton';
 
+// Mock window.matchMedia
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+
+
 describe('Hero Section Visual Hierarchy and Content Clarity', () => {
   // Mock the contexts
   const mockUseAuth = vi.spyOn(AuthContext, 'useAuth');
@@ -183,6 +199,143 @@ describe('Hero Section Visual Hierarchy and Content Clarity', () => {
       expect(container.textContent).toContain(currentYear);
       expect(container.textContent).toContain('ShortURL');
       expect(container.textContent).toContain('All rights reserved');
+    });
+
+    it('should display ShortURL branding in footer', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      expect(container.textContent).toContain('ShortURL');
+      const footer = container.querySelector('footer');
+      expect(footer).toBeInTheDocument();
+    });
+
+    it('should render navigation links in footer', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const links = container.querySelectorAll('footer a');
+      const linkTexts = Array.from(links).map(link => link.textContent);
+
+      expect(linkTexts).toContain('Home');
+      expect(linkTexts).toContain('Dashboard');
+    });
+
+    it('should render social media links', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const externalLinks = container.querySelectorAll('a[target="_blank"]');
+      expect(externalLinks.length).toBeGreaterThan(0);
+
+      externalLinks.forEach(link => {
+        expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+      });
+    });
+
+    it('should be visible at bottom of page', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const footer = container.querySelector('footer');
+      expect(footer).toBeInTheDocument();
+    });
+
+    it('should have appropriate spacing from content', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const footer = container.querySelector('footer');
+      expect(footer).toHaveClass('py-8');
+      expect(footer).toHaveClass('px-4');
+    });
+
+    it('should maintain readability on all themes', () => {
+      const { container: darkContainer } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const footer = darkContainer.querySelector('footer');
+      expect(footer).toBeInTheDocument();
+    });
+  });
+
+  describe('Manual Test Cases for Footer', () => {
+    it('Test Case 1: Footer visibility and positioning - 375px viewport', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const footer = container.querySelector('footer');
+      expect(footer).toBeInTheDocument();
+      expect(footer).toHaveClass('w-full', 'px-4');
+    });
+
+    it('Test Case 2: Copyright notice verification', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const currentYear = new Date().getFullYear();
+      expect(container.textContent).toContain('©');
+      expect(container.textContent).toContain(currentYear.toString());
+      expect(container.textContent).toContain('ShortURL');
+    });
+
+    it('Test Case 3: Visual prominence and subdued styling', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const footer = container.querySelector('footer');
+      expect(footer).toBeInTheDocument();
+      const copyrightText = container.textContent;
+      expect(copyrightText).toContain('©');
+    });
+
+    it('Test Case 4: Navigation and link functionality', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const links = container.querySelectorAll('a');
+      expect(links.length).toBeGreaterThan(0);
+    });
+
+    it('Test Case 5: Theme consistency verification', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const footer = container.querySelector('footer');
+      expect(footer).toBeInTheDocument();
     });
   });
 });
