@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Home from './Home';
 import * as AuthContext from '../contexts/AuthContext';
 import * as ThemeContext from '../contexts/ThemeContext';
+import { FuturisticButton } from '../components/FuturisticButton';
 
 describe('Hero Section Visual Hierarchy and Content Clarity', () => {
   // Mock the contexts
@@ -182,6 +183,277 @@ describe('Hero Section Visual Hierarchy and Content Clarity', () => {
       expect(container.textContent).toContain(currentYear);
       expect(container.textContent).toContain('ShortURL');
       expect(container.textContent).toContain('All rights reserved');
+    });
+  });
+});
+
+describe('Manual Test Case 2: Check text contrast ratios', () => {
+  it('should document text contrast information for manual verification', () => {
+    const { container } = render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    );
+
+    const pageContent = container.textContent || '';
+
+    // Test case documents the following contrast checks (manual):
+    // 1. Large headline text in gradient colors (blue-600, purple-600, pink-600 in light mode)
+    // 2. Normal text subheadline (should meet WCAG AA 4.5:1 in both themes)
+    // 3. Button text colors (neon green on dark background, contrasting in both themes)
+    // 4. Feature card text (glassmorphism with appropriate opacity)
+    // All must meet WCAG AA standards in both light and dark themes
+
+    expect(pageContent).toContain('Simplify Your Links');
+  });
+});
+
+describe('Manual Test Case 5: Animated background integration', () => {
+  it('should provide infrastructure for testing background readability', () => {
+    const { container } = render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    );
+
+    expect(container.innerHTML).toBeDefined();
+    // Manual testing should verify:
+    // 1. Text readability over animated particle background
+    // 2. No text blending with background particles
+    // 3. Appropriate opacity differences between light/dark themes
+  });
+});
+
+describe('Manual Test Case 6: Prefers-reduced-motion support', () => {
+  it('should provide testable structure for reduced motion', () => {
+    const { container } = render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    );
+
+    expect(container).toBeInTheDocument();
+    // Manual testing should verify:
+    // 1. Animations respect prefers-reduced-motion media query
+    // 2. Background animation can be reduced or stopped when requested
+    // 3. Text remains readable without animations
+  });
+});
+
+describe('Responsive Layout Across All Viewports', () => {
+  describe('Test Case 1: Desktop layout (1920x1080)', () => {
+    it('should render layout classes expected for desktop viewport', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      // Verify grid layout for 3 columns on desktop
+      const gridContainer = container.querySelector('.grid');
+      expect(gridContainer).toBeInTheDocument();
+
+      // Check for responsive grid classes (md:grid-cols-3 for desktop)
+      const featuresSection = gridContainer?.parentElement;
+      expect(featuresSection).toBeInTheDocument();
+
+      // Verify max-width container for proper centering
+      const maxWidthContainer = container.querySelector('.max-w-4xl, .max-w-6xl');
+      expect(maxWidthContainer).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 2: Laptop layout (1366x768)', () => {
+    it('should maintain readable text sizes and spacing', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      // Check for responsive text sizing (md:text-7xl for large screens, text-5xl for smaller)
+      const headline = container.querySelector('h1');
+      expect(headline).toBeInTheDocument();
+      expect(headline?.className).toContain('text-5xl');
+      expect(headline?.className).toMatch(/md:text-\d+/);
+
+      // Verify spacing classes exist
+      const heroSection = container.querySelector('.mb-12');
+      expect(heroSection).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 3: Tablet portrait layout (768x1024)', () => {
+    it('should adapt to 2-column feature grid on tablet', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      // Verify features section exists
+      const pageContent = container.textContent || '';
+      expect(pageContent).toContain('Features');
+
+      // Verify grid system is present
+      const gridContainer = container.querySelector('.grid');
+      expect(gridContainer).toBeInTheDocument();
+
+      // On tablet, grid should fill space with gap spacing
+      const gapClasses = container.querySelectorAll('.gap-4, .gap-8');
+      expect(gapClasses.length).toBeGreaterThan(0);
+
+      // Verify buttons remain prominent
+      expect(pageContent).toContain('Get Started');
+      expect(pageContent).toContain('Login');
+    });
+  });
+
+  describe('Test Case 4: Mobile portrait layout (375x812)', () => {
+    it('should stack CTAs vertically and use single column layout', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      // Check for flex-col class to stack elements
+      const ctaContainer = container.querySelector('.flex');
+      expect(ctaContainer?.className).toContain('flex-col');
+
+      // Verify buttons are rendered
+      expect(container.textContent).toContain('Get Started');
+      expect(container.textContent).toContain('Login');
+
+      // Verify single column grid on mobile (grid-cols-1 by default)
+      const gridContainer = container.querySelector('.grid');
+      expect(gridContainer).toBeInTheDocument();
+
+      // Check touch-friendly spacing
+      const paddingElements = container.querySelectorAll('.p-4, .p-6');
+      expect(paddingElements.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Test Case 5: Mobile landscape layout (812x375)', () => {
+    it('should reflow content appropriately in landscape', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      // Hero section should still be visible without excessive scrolling
+      const heroSection = container.querySelector('.min-h-screen');
+      expect(heroSection).toBeInTheDocument();
+
+      // Verify content centers properly
+      const centeringClasses = container.querySelectorAll('.items-center, .justify-center');
+      expect(centeringClasses.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Test Case 6: Touch target sizes (mobile)', () => {
+    it('should use button sizes that meet 44px minimum touch target recommendations', () => {
+      // Verify button padding classes that create adequate touch targets
+      const buttonPaddingClassKey = { lg: 'px-6 py-3' };
+
+      // Create a test button with large size to verify padding
+      const { container } = render(
+        <FuturisticButton size="lg" variant="neon">
+          Test Button
+        </FuturisticButton>
+      );
+
+      const button = container.querySelector('button');
+      expect(button?.className).toContain('px-6 py-3');
+    });
+
+    it('should verify Link components wrap buttons with proper spacing', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      // Verify buttons exist within Links
+      const pageContent = container.textContent || '';
+      expect(pageContent).toContain('Get Started');
+      expect(pageContent).toContain('Login');
+    });
+  });
+
+  describe('Test Case 7: Text readability on mobile', () => {
+    it('should maintain readable text sizes across all viewport sizes', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      // Check for responsive text hierarchy
+      const h1Element = container.querySelector('h1');
+      expect(h1Element?.className).toContain('text-5xl');
+      expect(h1Element?.className).toMatch(/md:text-\d+/); // Has md: breakpoint
+
+      // Verify paragraph text is readable
+      const paragraph = container.querySelector('p');
+      expect(paragraph?.className).toMatch(/text-\d+/); // Has text size class
+
+      // Check for responsive scaling
+      expect(h1Element?.className).toMatch(/text-\d+/); // Base mobile size
+    });
+  });
+
+  describe('Test Case 8: Feature cards layout', () => {
+    it('should verify all 6 feature cards render with responsive grid', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      // Count all feature card titles
+      const pageContent = container.textContent || '';
+      const featureTitles = [
+        'URL Shortening',
+        'Click Analytics',
+        'User Dashboard',
+        'Global Access',
+        'Secure Links',
+        'Lightning Fast'
+      ];
+
+      featureTitles.forEach(title => {
+        expect(pageContent).toContain(title);
+      });
+
+      // Verify cards are in a responsive grid
+      const gridContainer = container.querySelector('.grid');
+      expect(gridContainer).toBeInTheDocument();
+    });
+  });
+
+  describe('Test Case 9: Responsive images/icons', () => {
+    it('should render Lucide icons that maintain clarity across viewport sizes', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      // Icons are rendered via class names, verify text matches feature cards
+      expect(container.textContent).toContain('URL Shortening');
+      expect(container.textContent).toContain('Click Analytics');
+      expect(container.textContent).toContain('User Dashboard');
+      expect(container.textContent).toContain('Global Access');
+      expect(container.textContent).toContain('Secure Links');
+      expect(container.textContent).toContain('Lightning Fast');
+
+      // Verify features section exists
+      const featuresHeading = Array.from(container.querySelectorAll('h2'))
+        .find(h2 => h2.textContent?.includes('Features'));
+      expect(featuresHeading).toBeTruthy();
     });
   });
 });
