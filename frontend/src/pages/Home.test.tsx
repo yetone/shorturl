@@ -663,3 +663,112 @@ describe('Manual Test Case 6: Prefers-reduced-motion support', () => {
     // 3. Text remains readable without animations
   });
 });
+
+// Additional CTA-specific test suite
+describe('CTA Button Optimization and Hierarchy', () => {
+  const mockUseAuth = vi.spyOn(AuthContext, 'useAuth');
+  const mockUseTheme = vi.spyOn(ThemeContext, 'useTheme');
+
+  beforeEach(() => {
+    mockUseAuth.mockReturnValue({ user: null, login: vi.fn(), logout: vi.fn(), register: vi.fn() });
+    mockUseTheme.mockReturnValue({ theme: 'light', toggleTheme: vi.fn() });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('Primary CTA styling and prominence', () => {
+    it('should render "Get Started" button with neon variant for prominence', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const registerLink = container.querySelector('a[href="/register"]');
+      expect(registerLink).toBeInTheDocument();
+      expect(registerLink?.textContent).toContain('Get Started');
+    });
+
+    it('should use larger size for primary CTA to create prominence', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const getStartedButton = container.querySelector('a[href="/register"] button');
+      expect(getStartedButton).toBeInTheDocument();
+    });
+  });
+
+  describe('Secondary CTA styling', () => {
+    it('should render "Login" button with outline variant', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const loginLink = container.querySelector('a[href="/login"]');
+      expect(loginLink).toBeInTheDocument();
+    });
+  });
+
+  describe('CTA navigation behavior', () => {
+    it('should navigate to /register when clicking "Get Started" (unauthenticated)', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const registerLink = container.querySelector('a[href="/register"]');
+      expect(registerLink).toBeInTheDocument();
+      expect(registerLink?.textContent).toContain('Get Started');
+    });
+
+    it('should navigate to /login when clicking "Login" button', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const loginLink = container.querySelector('a[href="/login"]');
+      expect(loginLink).toBeInTheDocument();
+    });
+
+    it('should navigate to /dashboard when authenticated', () => {
+      mockUseAuth.mockReturnValue({
+        user: { id: 1, email: 'test@example.com' },
+        login: vi.fn(),
+        logout: vi.fn(),
+        register: vi.fn()
+      });
+
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const dashboardLink = container.querySelector('a[href="/dashboard"]');
+      expect(dashboardLink).toBeInTheDocument();
+    });
+  });
+
+  describe('Mobile responsiveness', () => {
+    it('should stack CTAs vertically on mobile', () => {
+      const { container } = render(
+        <BrowserRouter>
+          <Home />
+        </BrowserRouter>
+      );
+
+      const ctaContainer = container.querySelector('.flex-col');
+      expect(ctaContainer).toBeInTheDocument();
+    });
+  });
+});
