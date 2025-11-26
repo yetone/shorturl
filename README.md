@@ -2,6 +2,8 @@
 
 A URL shortening service with analytics dashboard. Create short, memorable links that redirect to your long URLs. Track clicks and analyze performance with detailed analytics.
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 ## Features
 
 - **URL Shortening**: Transform long links into short, memorable URLs
