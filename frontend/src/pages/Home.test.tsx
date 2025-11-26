@@ -31,6 +31,9 @@ vi.mock('framer-motion', () => ({
     h2: ({ children, ...props }: any) => <h2 {...props}>{children}</h2>,
     p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
     footer: ({ children, ...props }: any) => <footer {...props}>{children}</footer>,
+    section: ({ children, ...props }: any) => <section {...props}>{children}</section>,
+    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+    span: ({ children, ...props }: any) => <span {...props}>{children}</span>,
   },
 }));
 
@@ -41,6 +44,10 @@ vi.mock('../components/BackgroundEffect', () => ({
 
 vi.mock('../components/FuturisticButton', () => ({
   FuturisticButton: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+}));
+
+vi.mock('../components/SocialProof', () => ({
+  SocialProof: () => <div data-testid="social-proof-section" />,
 }));
 
 vi.mock('../components/GlassMorphismCard', () => ({
