@@ -314,12 +314,12 @@ describe('Feature Card Integration', () => {
     const neonPinkIcons = container.querySelectorAll('.text-neon-pink');
     const neonYellowIcons = container.querySelectorAll('.text-neon-yellow');
 
-    // URL Shortening and Secure Links use neon-green
-    expect(neonGreenIcons.length).toBe(2);
-    // Click Analytics and Global Access use neon-blue
-    expect(neonBlueIcons.length).toBe(2);
-    // User Dashboard uses neon-pink
-    expect(neonPinkIcons.length).toBe(1);
+    // URL Shortening, Secure Links (Features) + Paste URL (How It Works) use neon-green
+    expect(neonGreenIcons.length).toBe(3);
+    // Click Analytics, Global Access (Features) + Get Short Link (How It Works) use neon-blue
+    expect(neonBlueIcons.length).toBe(3);
+    // User Dashboard (Features) + Track & Share (How It Works) use neon-pink
+    expect(neonPinkIcons.length).toBe(2);
     // Lightning Fast uses neon-yellow
     expect(neonYellowIcons.length).toBe(1);
   });
