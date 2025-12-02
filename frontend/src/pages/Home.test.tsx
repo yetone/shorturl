@@ -268,10 +268,84 @@ describe('Hero Section Display - Scenario Tests', () => {
     });
   });
 
-  // Test authenticated user behavior
-  describe('Authenticated User Behavior', () => {
-    it('should link "Get Started" to /dashboard for authenticated user', async () => {
+  // Test authenticated user behavior - Scenario: Authenticated User Dashboard Navigation
+  describe('Authenticated User Dashboard Navigation (Scenario 4)', () => {
+    beforeEach(() => {
       // Mock authenticated user
+      vi.mocked(useAuth).mockReturnValue({
+        user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        loading: false,
+        isAuthenticated: true,
+        isAdmin: false,
+        login: vi.fn(),
+        logout: vi.fn(),
+      });
+    });
+
+    // Test Case 1: View homepage as authenticated user - Primary CTA displays 'Go to Dashboard' text
+    it('should display "Go to Dashboard" CTA for authenticated user (Test Case 1 - Integration)', async () => {
+      renderHome();
+
+      await waitFor(() => {
+        const dashboardButton = screen.getByRole('button', { name: /Go to Dashboard/i });
+        expect(dashboardButton).toBeInTheDocument();
+      });
+    });
+
+    it('should NOT display "Get Started" CTA for authenticated user', async () => {
+      renderHome();
+
+      await waitFor(() => {
+        expect(screen.queryByRole('button', { name: /^Get Started$/i })).not.toBeInTheDocument();
+      });
+    });
+
+    // Test Case 2: Click 'Go to Dashboard' button - User is navigated to /dashboard route
+    it('should link "Go to Dashboard" to /dashboard for authenticated user (Test Case 2 - E2E)', async () => {
+      renderHome();
+
+      await waitFor(() => {
+        const dashboardLink = screen.getByRole('link', { name: /Go to Dashboard/i });
+        expect(dashboardLink).toHaveAttribute('href', '/dashboard');
+      });
+    });
+
+    // Test Case 3: Check AuthContext integration - Component correctly reads authentication state
+    it('should correctly read authentication state from AuthContext (Test Case 3 - Unit)', async () => {
+      renderHome();
+
+      await waitFor(() => {
+        // When authenticated, we should see "Go to Dashboard" not "Get Started"
+        expect(screen.getByRole('button', { name: /Go to Dashboard/i })).toBeInTheDocument();
+        // The link should point to /dashboard
+        const dashboardLink = screen.getByRole('link', { name: /Go to Dashboard/i });
+        expect(dashboardLink).toHaveAttribute('href', '/dashboard');
+      });
+    });
+
+    it('should have AuthContext integrated with correct isAuthenticated state', async () => {
+      // First test with unauthenticated state
+      vi.mocked(useAuth).mockReturnValue({
+        user: null,
+        loading: false,
+        isAuthenticated: false,
+        isAdmin: false,
+        login: vi.fn(),
+        logout: vi.fn(),
+      });
+
+      const { unmount } = renderHome();
+
+      await waitFor(() => {
+        // Unauthenticated: should show "Get Started"
+        expect(screen.getByRole('button', { name: /Get Started/i })).toBeInTheDocument();
+        const getStartedLink = screen.getByRole('link', { name: /Get Started/i });
+        expect(getStartedLink).toHaveAttribute('href', '/register');
+      });
+
+      unmount();
+
+      // Now test with authenticated state
       vi.mocked(useAuth).mockReturnValue({
         user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
         loading: false,
@@ -284,8 +358,19 @@ describe('Hero Section Display - Scenario Tests', () => {
       renderHome();
 
       await waitFor(() => {
-        const getStartedLink = screen.getByRole('link', { name: /Get Started/i });
-        expect(getStartedLink).toHaveAttribute('href', '/dashboard');
+        // Authenticated: should show "Go to Dashboard"
+        expect(screen.getByRole('button', { name: /Go to Dashboard/i })).toBeInTheDocument();
+        const dashboardLink = screen.getByRole('link', { name: /Go to Dashboard/i });
+        expect(dashboardLink).toHaveAttribute('href', '/dashboard');
+      });
+    });
+
+    it('should still display Login button for authenticated user', async () => {
+      renderHome();
+
+      await waitFor(() => {
+        const loginButton = screen.getByRole('button', { name: /Login/i });
+        expect(loginButton).toBeInTheDocument();
       });
     });
   });
