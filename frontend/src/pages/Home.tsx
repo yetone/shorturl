@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FuturisticButton } from '../components/FuturisticButton';
 import { GlassMorphismCard } from '../components/GlassMorphismCard';
 import { BackgroundEffect } from '../components/BackgroundEffect';
+import { InteractiveDemo } from '../components/InteractiveDemo';
 import { Link2, BarChart3, LayoutDashboard, Globe, Shield, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -80,8 +81,18 @@ const Home: FC = () => {
             </Link>
           </motion.div>
         </motion.div>
-        
-        <motion.div 
+
+        {/* Interactive Demo Section */}
+        <motion.div
+          className="max-w-6xl mx-auto mt-16 w-full z-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+        >
+          <InteractiveDemo />
+        </motion.div>
+
+        <motion.div
           className="max-w-6xl mx-auto mt-32 w-full z-10"
           variants={container}
           initial="hidden"
