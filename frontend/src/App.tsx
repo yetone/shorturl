@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import UrlStats from './pages/UrlStats';
 import Settings from './pages/Settings';
+import Poem from './pages/Poem';
 
 // Components
 import ProtectedLayout from './components/ProtectedLayout';
@@ -39,6 +40,7 @@ const App: FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/poem" element={<Poem />} />
 
                 {/* Protected routes */}
                 <Route element={<ProtectedLayout />}>
