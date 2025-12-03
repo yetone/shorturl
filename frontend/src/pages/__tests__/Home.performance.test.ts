@@ -10,11 +10,14 @@
  * They are designed to be run as integration/e2e tests with Playwright.
  *
  * Test 3 is an integration test that can run during the build process.
+ *
+ * @vitest-environment node
  */
 
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
+import { describe, it, expect, beforeAll } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Performance configuration constants based on PRD requirements (NFR-1)
 const PERFORMANCE_CONFIG = {
@@ -121,6 +124,8 @@ describe('Home - Performance - Page Load', () => {
     let buildExists: boolean = false;
 
     beforeAll(() => {
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
       distPath = path.resolve(__dirname, '../../../dist');
       buildExists = fs.existsSync(distPath);
     });
@@ -164,7 +169,7 @@ describe('Home - Performance - Page Load', () => {
 
       // Find the main JS bundle
       const files = fs.readdirSync(assetsPath);
-      const jsBundle = files.find(f => f.startsWith('index-') && f.endsWith('.js'));
+      const jsBundle = files.find((f: string) => f.startsWith('index-') && f.endsWith('.js'));
 
       if (!jsBundle) {
         console.log('Note: Main JS bundle not found.');
@@ -203,8 +208,8 @@ describe('Home - Performance - Page Load', () => {
       const files = fs.readdirSync(assetsPath);
 
       // Should have at least one JS and one CSS file
-      const hasJS = files.some(f => f.endsWith('.js'));
-      const hasCSS = files.some(f => f.endsWith('.css'));
+      const hasJS = files.some((f: string) => f.endsWith('.js'));
+      const hasCSS = files.some((f: string) => f.endsWith('.css'));
 
       expect(hasJS).toBe(true);
       expect(hasCSS).toBe(true);
