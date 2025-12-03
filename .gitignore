@@ -39,6 +39,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+.pnpm-store/
 
 # Environment variables
 .env
@@ -52,3 +53,4 @@ yarn-error.log*
 *.sln
 *.sw?
 .envrc
+.something/
