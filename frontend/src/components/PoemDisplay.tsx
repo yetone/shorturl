@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { GlassMorphismCard } from './GlassMorphismCard';
 import { useTheme } from '../contexts/ThemeContext';
+import { generatePoem } from '../utils/poemGenerator';
 
 interface PoemDisplayProps {
-  poem: string;
+  poem?: string;
   title?: string;
   className?: string;
 }
@@ -16,8 +17,17 @@ export const PoemDisplay: FC<PoemDisplayProps> = ({
 }) => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
+  const [displayPoem, setDisplayPoem] = useState<string>(poem || '');
 
-  const lines = poem.split('\n');
+  useEffect(() => {
+    if (!poem) {
+      setDisplayPoem(generatePoem());
+    } else {
+      setDisplayPoem(poem);
+    }
+  }, [poem]);
+
+  const lines = displayPoem.split('\n');
 
   return (
     <GlassMorphismCard
