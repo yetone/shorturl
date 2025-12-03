@@ -9,6 +9,7 @@ import { Testimonials } from '../components/Testimonials';
 import { Link2, BarChart3, LayoutDashboard, Globe, Shield, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { StatisticsSection } from '../components/StatisticsSection';
 
 const Home: FC = () => {
   const { user } = useAuth();
@@ -93,8 +94,11 @@ const Home: FC = () => {
           <InteractiveDemo />
         </motion.div>
 
+        {/* Statistics Section - positioned to build credibility early in the page flow */}
+        <StatisticsSection className="mt-16 z-10" />
+
         <motion.div
-          className="max-w-6xl mx-auto mt-32 w-full z-10"
+          className="max-w-6xl mx-auto mt-16 w-full z-10"
           variants={container}
           initial="hidden"
           whileInView="show"

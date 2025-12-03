@@ -1,5 +1,11 @@
-import '@testing-library/jest-dom'
-import { vi } from 'vitest'
+import '@testing-library/jest-dom';
+import { afterEach, vi } from 'vitest';
+import { cleanup } from '@testing-library/react';
+
+// Runs a cleanup after each test case
+afterEach(() => {
+  cleanup();
+});
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -14,39 +20,43 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
-})
+});
 
-// Mock IntersectionObserver
-const mockIntersectionObserver = vi.fn()
-mockIntersectionObserver.mockReturnValue({
-  observe: () => null,
-  unobserve: () => null,
-  disconnect: () => null,
-})
-window.IntersectionObserver = mockIntersectionObserver
+// Mock IntersectionObserver for animations that use viewport detection
+class MockIntersectionObserver {
+  constructor(_callback: IntersectionObserverCallback, _options?: IntersectionObserverInit) {}
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+  root = null;
+  rootMargin = '';
+  thresholds = [];
+  takeRecords = vi.fn(() => []);
+}
+window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
 
 // Mock MutationObserver
-const mockMutationObserver = vi.fn()
-mockMutationObserver.mockReturnValue({
-  observe: () => null,
-  disconnect: () => null,
-  takeRecords: () => [],
-})
-window.MutationObserver = mockMutationObserver
+class MockMutationObserver {
+  constructor(_callback: MutationCallback) {}
+  observe = vi.fn();
+  disconnect = vi.fn();
+  takeRecords = vi.fn(() => []);
+}
+window.MutationObserver = MockMutationObserver as unknown as typeof MutationObserver;
 
 // Mock ResizeObserver
-const mockResizeObserver = vi.fn()
-mockResizeObserver.mockReturnValue({
-  observe: () => null,
-  unobserve: () => null,
-  disconnect: () => null,
-})
-window.ResizeObserver = mockResizeObserver
+class MockResizeObserver {
+  constructor(_callback: ResizeObserverCallback) {}
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+window.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
 
 // Mock requestAnimationFrame
 window.requestAnimationFrame = vi.fn((cb: FrameRequestCallback): number => {
-  return setTimeout(cb, 0) as unknown as number
-})
+  return setTimeout(cb, 0) as unknown as number;
+});
 window.cancelAnimationFrame = vi.fn((id: number): void => {
-  clearTimeout(id)
-})
+  clearTimeout(id);
+});
