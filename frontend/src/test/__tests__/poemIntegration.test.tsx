@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { useState } from 'react';
 import { PoemDisplay } from '../../components/PoemDisplay';
 import { generatePoem } from '../../utils/poemGenerator';
+import { ThemeProvider } from '../../contexts/ThemeContext';
 
 // Integration component that simulates triggering poem generation
 function PoemGeneratorPage() {
@@ -35,9 +36,18 @@ function PoemGeneratorPage() {
   );
 }
 
+// Wrapper component to provide required context
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <ThemeProvider>{children}</ThemeProvider>
+);
+
 describe('Poem Generation Integration', () => {
   it('should generate and display a poem when user triggers poem generation action', () => {
-    render(<PoemGeneratorPage />);
+    render(
+      <TestWrapper>
+        <PoemGeneratorPage />
+      </TestWrapper>
+    );
 
     // Step 1: User navigates to poem generation feature (page is rendered)
     const page = screen.getByTestId('poem-generator-page');
@@ -63,7 +73,11 @@ describe('Poem Generation Integration', () => {
   });
 
   it('should display poem title after generation', () => {
-    render(<PoemGeneratorPage />);
+    render(
+      <TestWrapper>
+        <PoemGeneratorPage />
+      </TestWrapper>
+    );
 
     const generateButton = screen.getByTestId('generate-poem-button');
     fireEvent.click(generateButton);
@@ -74,7 +88,11 @@ describe('Poem Generation Integration', () => {
   });
 
   it('should be able to generate multiple poems by clicking the button again', () => {
-    render(<PoemGeneratorPage />);
+    render(
+      <TestWrapper>
+        <PoemGeneratorPage />
+      </TestWrapper>
+    );
 
     const generateButton = screen.getByTestId('generate-poem-button');
 
