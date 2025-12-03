@@ -21,7 +21,7 @@ const { createMotionComponent, MockBackgroundEffect, mockUseAuth, mockUseTheme }
             filteredProps[key] = value;
           }
         }
-        return React.createElement(Tag, { className, style, ref, ...filteredProps }, children);
+        return React.createElement(Tag, { className, style, ref, ...filteredProps }, children as React.ReactNode);
       }
     );
     MotionComponent.displayName = `motion.${Tag}`;
