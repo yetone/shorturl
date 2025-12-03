@@ -33,15 +33,16 @@ const Home: FC = () => {
   return (
     <>
       <BackgroundEffect />
-      
-      <div className={`relative min-h-screen flex flex-col justify-center items-center p-4 overflow-hidden ${isDarkMode ? 'bg-gray-900 text-white' : ''}`}>
-        <motion.div 
-          className="max-w-4xl mx-auto text-center z-10"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <motion.h1 
+
+      <main className={`relative min-h-screen flex flex-col justify-center items-center p-4 overflow-hidden ${isDarkMode ? 'bg-gray-900 text-white' : ''}`}>
+        <header>
+          <motion.div
+            className="max-w-4xl mx-auto text-center z-10"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.h1 
             className="text-5xl md:text-7xl font-bold mb-8 leading-tight"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -80,6 +81,7 @@ const Home: FC = () => {
             </Link>
           </motion.div>
         </motion.div>
+        </header>
         
         <motion.div 
           className="max-w-6xl mx-auto mt-32 w-full z-10"
@@ -154,7 +156,7 @@ const Home: FC = () => {
         >
           <p>&copy; {new Date().getFullYear()} ShortURL. All rights reserved.</p>
         </motion.footer>
-      </div>
+      </main>
     </>
   );
 };
@@ -168,16 +170,19 @@ interface FeatureCardProps {
 }
 
 const FeatureCard: FC<FeatureCardProps> = ({ icon, title, description, variants, glowColor }) => {
+  // Generate a unique ID for aria-labelledby
+  const titleId = `feature-${title.toLowerCase().replace(/\s+/g, '-')}-title`;
+
   return (
-    <motion.div variants={variants}>
+    <motion.article variants={variants} aria-labelledby={titleId}>
       <GlassMorphismCard className="h-full p-6" glowColor={glowColor}>
-        <div className="mb-4">
+        <div className="mb-4" aria-hidden="true">
           {icon}
         </div>
-        <h3 className="text-xl font-bold mb-2">{title}</h3>
+        <h3 id={titleId} className="text-xl font-bold mb-2">{title}</h3>
         <p>{description}</p>
       </GlassMorphismCard>
-    </motion.div>
+    </motion.article>
   );
 };
 

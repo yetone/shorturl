@@ -31,6 +31,9 @@ vi.mock('framer-motion', () => ({
     footer: ({ children, className, ...props }: React.HTMLAttributes<HTMLElement>) => (
       <footer className={className} {...props}>{children}</footer>
     ),
+    article: ({ children, className, ...props }: React.HTMLAttributes<HTMLElement>) => (
+      <article className={className} {...props}>{children}</article>
+    ),
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
