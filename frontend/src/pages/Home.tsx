@@ -6,6 +6,7 @@ import { GlassMorphismCard } from '../components/GlassMorphismCard';
 import { BackgroundEffect } from '../components/BackgroundEffect';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { Testimonials } from '../components/Testimonials';
+import { HowItWorks } from '../components/HowItWorks';
 import { Link2, BarChart3, LayoutDashboard, Globe, Shield, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -96,6 +97,11 @@ const Home: FC = () => {
 
         {/* Statistics Section - positioned to build credibility early in the page flow */}
         <StatisticsSection className="mt-16 z-10" />
+
+        {/* How It Works Section */}
+        <div className="w-full z-10 mt-16">
+          <HowItWorks />
+        </div>
 
         <motion.div
           className="max-w-6xl mx-auto mt-16 w-full z-10"
