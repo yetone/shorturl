@@ -4,13 +4,40 @@ import { motion } from 'framer-motion';
 import { FuturisticButton } from '../components/FuturisticButton';
 import { GlassMorphismCard } from '../components/GlassMorphismCard';
 import { BackgroundEffect } from '../components/BackgroundEffect';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import { Link2, BarChart3, LayoutDashboard, Globe, Shield, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
+/**
+ * Safe hook to access auth context with graceful fallback.
+ * Returns default unauthenticated state if context is unavailable.
+ */
+const useSafeAuth = () => {
+  try {
+    const authResult = useAuth();
+    return authResult;
+  } catch {
+    return { user: null, loading: false, isAuthenticated: false, isAdmin: false };
+  }
+};
+
+/**
+ * Safe hook to access theme context with graceful fallback.
+ * Returns default light theme if context is unavailable.
+ */
+const useSafeTheme = () => {
+  try {
+    const themeResult = useTheme();
+    return themeResult;
+  } catch {
+    return { theme: 'light' as const, setTheme: () => {}, toggleTheme: () => {} };
+  }
+};
+
 const Home: FC = () => {
-  const { user } = useAuth();
-  const { theme } = useTheme();
+  const { user } = useSafeAuth();
+  const { theme } = useSafeTheme();
   const isAuthenticated = !!user;
   const isDarkMode = theme === 'dark';
   
@@ -32,7 +59,9 @@ const Home: FC = () => {
 
   return (
     <>
-      <BackgroundEffect />
+      <ErrorBoundary fallback={null}>
+        <BackgroundEffect />
+      </ErrorBoundary>
 
       <main className={`relative min-h-screen flex flex-col justify-center items-center p-4 overflow-hidden ${isDarkMode ? 'bg-gray-900 text-white' : ''}`}>
         <header>

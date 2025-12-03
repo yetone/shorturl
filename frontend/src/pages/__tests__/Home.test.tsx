@@ -8,6 +8,11 @@ vi.mock('../../components/BackgroundEffect', () => ({
   BackgroundEffect: () => <div data-testid="background-effect">Background Effect Mock</div>,
 }));
 
+// Mock the ErrorBoundary component
+vi.mock('../../components/ErrorBoundary', () => ({
+  ErrorBoundary: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
   motion: {
