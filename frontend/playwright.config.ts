@@ -31,6 +31,19 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    // Edge uses Chromium engine - test with Chromium channel when Edge binary not available
+    {
+      name: 'edge',
+      use: { ...devices['Desktop Edge'], channel: 'chromium' },
+    },
   ],
 
   /* Run your local dev server before starting the tests */

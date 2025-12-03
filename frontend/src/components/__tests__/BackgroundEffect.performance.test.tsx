@@ -429,7 +429,7 @@ describe('BackgroundEffect - 60fps Performance', () => {
       // If we have render times, verify they're reasonable
       if (renderTimes.length > 0) {
         // Each render time should be positive
-        renderTimes.forEach(time => {
+        renderTimes.forEach((time: number) => {
           expect(time).toBeGreaterThan(0);
         });
       }

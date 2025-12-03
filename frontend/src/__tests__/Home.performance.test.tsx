@@ -96,7 +96,7 @@ const {
           }
         }
 
-        return React.createElement(Tag, { className, style, ref, ...filteredProps, ...dataProps }, children);
+        return React.createElement(Tag, { className, style, ref, ...filteredProps, ...dataProps }, children as React.ReactNode);
       }
     );
     MotionComponent.displayName = `motion.${Tag}`;
