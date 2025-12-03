@@ -354,7 +354,7 @@ describe('Home Page - Enhanced Hero Section', () => {
       expect(registerLink).toBeInTheDocument()
     })
 
-    it('should link to dashboard for authenticated users', () => {
+    it('should show "Go to Dashboard" CTA for authenticated users', () => {
       mockUseAuth.mockReturnValue({
         user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
         loading: false,
@@ -366,10 +366,68 @@ describe('Home Page - Enhanced Hero Section', () => {
 
       renderWithRouter(<Home />)
 
+      // Should show "Go to Dashboard" for authenticated users
+      expect(screen.getByText('Go to Dashboard')).toBeInTheDocument()
+
       // Should link to dashboard
       const links = screen.getAllByRole('link')
       const dashboardLink = links.find(link => link.getAttribute('href') === '/dashboard')
       expect(dashboardLink).toBeInTheDocument()
+    })
+
+    it('should link primary CTA to /dashboard for authenticated users', () => {
+      mockUseAuth.mockReturnValue({
+        user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        loading: false,
+        isAuthenticated: true,
+        isAdmin: false,
+        login: vi.fn(),
+        logout: vi.fn(),
+      })
+
+      renderWithRouter(<Home />)
+
+      // Find the primary CTA button (neon variant)
+      const primaryCta = screen.getByTestId('cta-button-neon')
+      expect(primaryCta).toHaveTextContent('Go to Dashboard')
+
+      // Find the parent link and verify it points to dashboard
+      const link = primaryCta.closest('a')
+      expect(link).toHaveAttribute('href', '/dashboard')
+    })
+
+    it('should revert CTA to "Get Started" after logout (unauthenticated state)', () => {
+      // First render with authenticated user
+      mockUseAuth.mockReturnValue({
+        user: { id: 1, username: 'testuser', email: 'test@example.com', is_admin: 0 },
+        loading: false,
+        isAuthenticated: true,
+        isAdmin: false,
+        login: vi.fn(),
+        logout: vi.fn(),
+      })
+
+      const { unmount } = renderWithRouter(<Home />)
+      expect(screen.getByText('Go to Dashboard')).toBeInTheDocument()
+      unmount()
+
+      // Then render with unauthenticated user (simulating logout)
+      mockUseAuth.mockReturnValue({
+        user: null,
+        loading: false,
+        isAuthenticated: false,
+        isAdmin: false,
+        login: vi.fn(),
+        logout: vi.fn(),
+      })
+
+      renderWithRouter(<Home />)
+      expect(screen.getByText('Get Started')).toBeInTheDocument()
+
+      // Should link to register
+      const links = screen.getAllByRole('link')
+      const registerLink = links.find(link => link.getAttribute('href') === '/register')
+      expect(registerLink).toBeInTheDocument()
     })
   })
 

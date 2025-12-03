@@ -75,7 +75,7 @@ const Home: FC = () => {
           >
             <Link to={isAuthenticated ? "/dashboard" : "/register"}>
               <FuturisticButton variant="neon" size="lg">
-                Get Started
+                {isAuthenticated ? "Go to Dashboard" : "Get Started"}
               </FuturisticButton>
             </Link>
             <Link to="/login">
