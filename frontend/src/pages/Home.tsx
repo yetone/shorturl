@@ -7,6 +7,7 @@ import { BackgroundEffect } from '../components/BackgroundEffect';
 import { InteractiveDemo } from '../components/InteractiveDemo';
 import { Testimonials } from '../components/Testimonials';
 import { HowItWorks } from '../components/HowItWorks';
+import { FAQ } from '../components/FAQ';
 import { Link2, BarChart3, LayoutDashboard, Globe, Shield, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -170,6 +171,10 @@ const Home: FC = () => {
 
         <div className="w-full z-10 mt-16">
           <Testimonials />
+        </div>
+
+        <div className="w-full z-10 mt-8">
+          <FAQ />
         </div>
 
         <motion.footer
