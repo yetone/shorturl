@@ -83,6 +83,21 @@ const Home: FC = () => {
                 Login
               </FuturisticButton>
             </Link>
+            <FuturisticButton
+              variant="ghost"
+              size="lg"
+              onClick={() => {
+                const howItWorksSection = document.getElementById('how-it-works');
+                if (howItWorksSection) {
+                  howItWorksSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                  });
+                }
+              }}
+            >
+              Learn More
+            </FuturisticButton>
           </motion.div>
         </motion.div>
 
@@ -100,7 +115,7 @@ const Home: FC = () => {
         <StatisticsSection className="mt-16 z-10" />
 
         {/* How It Works Section */}
-        <div className="w-full z-10 mt-16">
+        <div id="how-it-works" className="w-full z-10 mt-16">
           <HowItWorks />
         </div>
 

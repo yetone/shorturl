@@ -6,8 +6,8 @@ import Home from '../Home'
 // Mock framer-motion to avoid animation issues in tests
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-      <div className={className} data-testid={props['data-testid']} {...props}>{children}</div>
+    div: ({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement> & { 'data-testid'?: string }) => (
+      <div className={className} {...props}>{children}</div>
     ),
     h1: ({ children, className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
       <h1 className={className} data-testid="hero-headline" {...props}>{children}</h1>
@@ -33,9 +33,10 @@ vi.mock('framer-motion', () => ({
 }))
 
 // Mock the AuthContext
-const mockUser = null
+type MockUser = { id: number; username: string; email: string; is_admin: number } | null
+const mockUser: MockUser = null
 const mockUseAuth = vi.fn(() => ({
-  user: mockUser,
+  user: mockUser as MockUser,
   loading: false,
   isAuthenticated: false,
   isAdmin: false,
